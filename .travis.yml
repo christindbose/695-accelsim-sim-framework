@@ -1,0 +1,16 @@
+dist: xenial
+
+before_install:
+    - docker pull accelsim/ubuntu-18.04_cuda-11:latest
+
+language: cpp
+
+
+matrix:
+  include:
+    - services: docker
+      env:
+        - CUDA_INSTALL_PATH=/usr/local/cuda-11.0
+
+script:
+    - docker run -v `pwd`:/home/runner/accel-sim:rw accelsim/ubuntu-18.04_cuda-11:latest /bin/bash -c "chown -R runner /home/runner/accel-sim; su - runner -c 'export CUDA_INSTALL_PATH=$CUDA_INSTALL_PATH && cd accel-sim && ./travis.sh'"
